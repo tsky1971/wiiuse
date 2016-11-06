@@ -317,7 +317,7 @@ void resize_window(GLint new_width, GLint new_height) {
 		new_height = 1;
 	}
 
-	SDL_SetVideoMode(width, height, 16, SDL_RESIZABLE | SDL_OPENGL);
+	SDL_SetVideoMode(width, height, 16, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	glViewport(0, 0, new_width, new_height);
 
@@ -394,7 +394,7 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	/* set window size */
 	width = wiimotes[0]->ir.vres[0];
 	height = wiimotes[0]->ir.vres[1];
-	SDL_SetVideoMode(width, height, 16, SDL_RESIZABLE | SDL_OPENGL);
+	SDL_SetVideoMode(width, height, 16, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	for (wm = 0; wm < MAX_WIIMOTES; ++wm) {
 		wiiuse_set_ir_vres(wiimotes[wm], width, height);
@@ -424,11 +424,20 @@ int WINAPI WinMain(HINSTANCE hInstance,	HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		if (SDL_PollEvent(&event)) {
 			switch (event.type) {
-				case SDL_VIDEORESIZE: {
+				if (event.type == SDL_WINDOWEVENT) {
+					switch (event.window.event) {
+					case SDL_WINDOWEVENT_RESIZED:
+						//SDL_Log("Window %d resized to %dx%d",
+						//	event->window.windowID, event->window.data1,
+						//	event->window.data2);
+
 						/* resize the window */
-						resize_window(event.resize.w, event.resize.h);
+						//resize_window(event.window resize.w, event.resize.h);
+						resize_window(event.window.data1, event.window.data2);
+
 						break;
 					}
+				}
 				case SDL_QUIT: {
 						/* shutdown */
 						SDL_Quit();
