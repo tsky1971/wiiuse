@@ -1,3 +1,7 @@
+if(NOT MSVC)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra")
+endif()
+
 set(SOURCES
 	classic.c
 	dynamics.c
@@ -83,23 +87,19 @@ set_property(TARGET
 
 set_property(TARGET wiiuse APPEND PROPERTY
   COMPILE_DEFINITIONS $<$<CONFIG:Debug>:WITH_WIIUSE_DEBUG>
-)    
+)
 
-install(TARGETS
-	wiiuse
-	RUNTIME
-	DESTINATION
-	bin
-	COMPONENT
-	runtime
+install(TARGETS wiiuse
+	RUNTIME DESTINATION bin
+	COMPONENT runtime
 	ARCHIVE
 	DESTINATION
-	lib
+	${CMAKE_INSTALL_LIBDIR}
 	COMPONENT
 	development
 	LIBRARY
 	DESTINATION
-	lib
+	${CMAKE_INSTALL_LIBDIR}
 	COMPONENT
 	runtime
 	PUBLIC_HEADER

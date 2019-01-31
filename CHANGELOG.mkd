@@ -1,71 +1,127 @@
 WiiUse Changelog
 ================
 
-Fork, located at <http://github.com/rpavlik/wiiuse>
+De-facto official fork, located at <http://github.com/wiiuse/wiiuse>
 
-Original project:
+Original project (0.12 and earlier):
 
-- <http://wiiuse.net/>
-- <http://wiiuse.sourceforge.net/>
 - <http://sourceforge.net/projects/wiiuse/>
+- Now-defunct web sites:
+  - wiiuse.net:
+    most recent archive from 2011
+    <https://web.archive.org/web/20110107085956/http://wiiuse.net/>
+  - wiiuse.sourceforge.net:
+    most recent archive from 2010 (looks identical on homepage to 2011 snapshot above)
+    <https://web.archive.org/web/20100216015311/http://wiiuse.sourceforge.net/>
 
-v0.15 -- ???
-------------
+v0.15.4 -- 28-Nov-2018
+--------------------
+
+Fixed:
+
+- Windows build - verified to work on VS Community 2017 from fresh install.
+
+Changed:
+
+- Removed `WCONST` macro of questionable value -
+  it made some struct members "const" for consuming software,
+  but non-const within the library.
+  Made it too complex to maintain.
+  Shouldn't really affect usage (doesn't change layout, etc.),
+  but noted separately because it is technically a (very minor) API change.
+- Removed broken links to old project web sites.
+
+v0.15.3 -- 25-Nov-2018
+--------------------
+
+Fixed:
+
+- Fixed forgotten version number
+- Fixed library installation prefix on 64bit systems
+
+v0.15.2 -- 25-Nov-2018
+--------------------
+
+Fixed the L2CAP channel setup on Linux, now we use only the
+interrupt/data channel (0x13) and not the control channel (0x11). This
+finally fixes the RVL-CNT-01-TR (gen 2) Wiimote. The control channel
+is still kept open, in case something needs it in the future.
+
+Cleaned the indentation by running the code through clang-format.
+
+v0.15.1 -- 20-Nov-2018
+--------------------
+
+"Brown paper bag" release - missed some build-related pull requests
+before tagging 0.15.
+
+v0.15 -- 20-Nov-2018
+--------------------
+
+**Roll-up release of accumulated changes - library has been "stable" now
+for some time**
 
 Added:
 
 - Callback API with constant-size wiimote_callback_data_t.
-	Added to more easily support a ctypes python binding, generated
-	by and included with RPythonic http://code.google.com/p/rpythonic/
-	Thanks to hartsantler for this feature.
+  Added to more easily support a ctypes python binding, generated
+  by and included with RPythonic <http://code.google.com/p/rpythonic/>
+  Thanks to hartsantler for this feature.
 
 - Ability to build as a static library - must define WIIUSE_STATIC in
-	client app as well as choosing the appropriate option when building
-	WiiUse. The default is still a shared library (dll/so). Merged from
-	paulburton and added to build system.
+  client app as well as choosing the appropriate option when building
+  WiiUse. The default is still a shared library (dll/so). Merged from
+  paulburton and added to build system.
 
 - Initial MotionPlus support. Thanks to admiral0 for the initial pull
-	request merging from fwiine, and to Jan Ciger Reviatech SAS for building
-	on it with fwiine and WiiC code as well as additional code. Try it out
-	in the example by pressing 1 to start and 2 to stop.
+  request merging from fwiine, and to Jan Ciger Reviatech SAS for building
+  on it with fwiine and WiiC code as well as additional code. Try it out
+  in the example by pressing 1 to start and 2 to stop.
 
 - Full Mac support using Apple's native Bluetooth stack, based on [wiic](http://wiic.sourceforge.net/).
 
 Fixed:
 
 - Properly disable rumbling when told to. Thanks to Jeff Baker from
-	(Inv3rsion, LLC.)(http://www.inv3rsion.com/)
+  [Inv3rsion, LLC.](http://www.inv3rsion.com/)
 
 - Builds properly now on mingw (both cross-compile and native).
 
 - Improved reliability on Windows when running an app twice without dis-connecting
-	the Wiimote (came as a part of the MotionPlus support.)
+  the Wiimote (came as a part of the MotionPlus support.)
+
+- Build system fixes.
 
 Changed:
 
 - Improved header includes using feedback from (include-what-you-use)[iwyu]
 
 - Additional internal function `wiiuse_millisleep()` to reduce the number
-	of `ifdef`s scattered through the code.
+  of `ifdef`s scattered through the code.
 
 - Provide endianness-conversion and buffer/unbuffer functions, rather than
-	a jumble of function-style macros and raw type punning. This should
-	fix all aliasing warnings.
+  a jumble of function-style macros and raw type punning. This should
+  fix all aliasing warnings.
+
+- Cleaned up README and CHANGELOG.
+
+- Migrated repo to its own organization on GitHUb.
 
 [iwyu]:http://code.google.com/p/include-what-you-use/
 
 v0.14 -- 2 May 2011
 -------------------
+
 Added:
 
 - Support for redirecting or disabling messages: function
-	`wiiuse_set_output` in `wiiuse.h`. The preprocessor symbol
-	`WIIUSE_HAS_OUTPUT_REDIRECTION` indicates the presence of this feature.
-	Thanks to Johannes Zarl for this handy feature!
+  `wiiuse_set_output` in `wiiuse.h`. The preprocessor symbol
+  `WIIUSE_HAS_OUTPUT_REDIRECTION` indicates the presence of this feature.
+  Thanks to Johannes Zarl for this handy feature!
 
 - Doxyfile and "doc" target to the build system, to easily make use of
-	the documentation already in the code, along with doc cleanups and
-	improvements. (rp)
+  the documentation already in the code, along with doc cleanups and
+  improvements. (rp)
 
 - Added balance board code to example (Paul Burton, rp)
 
@@ -86,15 +142,15 @@ Changed:
 - Cleaned up README. (rp)
 
 - Removed references to the LGPL/noncommercial license, since it's
-	confusing and not useful in a practical sense. See, e.g.,
-	<http://lists.fedoraproject.org/pipermail/legal/2010-November/001470.html>
+  confusing and not useful in a practical sense. See, e.g.,
+  <http://lists.fedoraproject.org/pipermail/legal/2010-November/001470.html>
 
-- Renamed bundled workaround stdint.h header for Visual Studio,	which
-	we still have to use on MSVC 2010 for some unknown reason. (rp)
-
+- Renamed bundled workaround stdint.h header for Visual Studio,  which
+  we still have to use on MSVC 2010 for some unknown reason. (rp)
 
 v0.13.1 -- 11 November 2010
 ---------------------------
+
 Fixed:
 
 - Fix crashers due to unchecked pointer use.
@@ -103,9 +159,11 @@ Fixed:
 
 v0.13 -- 11 November 2010
 -------------------------
+
 Added:
+
 - Support for Wii Balance Board ("wiiboard"): your code can
-	`#ifdef EXP_WII_BOARD` (support based in part on code from TU-Delft)
+  `#ifdef EXP_WII_BOARD` (support based in part on code from TU-Delft)
 
 - CMake-based cross-platform build system
 
@@ -127,11 +185,12 @@ Changed:
 - Old makefiles and Visual Studio projects removed.
 
 - CMake allows easy building of binary packages with a uniform
-	directory structure: .dll/.exe in bin, .lib/.so in lib, .h in
-	include.
+  directory structure: .dll/.exe in bin, .lib/.so in lib, .h in
+  include.
 
 v0.12 -- 2 Apr 2008
 -------------------
+
 Added:
 
 - API function `wiiuse_set_ir_sensitivity()`
@@ -155,8 +214,7 @@ Changed:
 - `wiiuse_set_nunchuk_accel_threshold()` now takes a `wiimote_t` pointer
 
 - `wiiuse_read_data()` generates an event `WIIUSE_READ_DATA` rather than
-	executing a callback
-
+  executing a callback
 
 v0.11 -- 25 Feb 2008
 --------------------
@@ -191,6 +249,7 @@ Fixed:
 
 v0.10 -- 11 Feb 2008
 --------------------
+
 Added:
 
 - Real dynamic linking (by noisehole)
@@ -237,6 +296,7 @@ Removed:
 
 v0.9 -- 3 Nov 2007
 ------------------
+
 Fixed:
 
 - Can now use `include/wiiuse.h` in C++ projects.
@@ -247,6 +307,7 @@ Fixed:
 
 v0.8 -- 27 Oct 2007
 -------------------
+
 Changed:
 
 - Bumped API version to 8
@@ -254,7 +315,7 @@ Changed:
 - Exported all API functions for usage with non-C/C++ languages.
 
 - Changed event callback to only trigger if a significant state change
-	occurs.
+  occurs.
 
 Added:
 
@@ -266,6 +327,7 @@ Fixed:
 
 v0.7 -- 19 Oct 2007
 -------------------
+
 Changed:
 
 - Bumped API version to 7
@@ -279,7 +341,7 @@ Added:
 - [Windows] BlueSoleil support.
 
 - [Windows] Bluetooth stack auto-detection (WinXP SP2, Bluesoleil,
-	Widdcomm tested).
+  Widdcomm tested).
 
 - [Windows] API function `wiiuse_set_bluetooth_stack()`.
 
@@ -288,12 +350,13 @@ Added:
 Fixed:
 
 - [Windows] Problem where a connection is made to a wiimote that does
-	not exist.
+  not exist.
 
 - [Windows] Issue that occurred while using multiple wiimotes.
 
 v0.6 -- 16 Oct 2007
 -------------------
+
 Changed:
 
 - Bumped API version to 0.6.
@@ -310,6 +373,7 @@ Added:
 
 v0.5 -- 13 Oct 2007
 -------------------
+
 Changed:
 
 - Bumped API version to 0.5.
@@ -328,6 +392,7 @@ Fixed:
 
 v0.4 -- 08 Oct 2007
 -------------------
+
 Changed:
 
 - Bumped API version to 0.4.
@@ -337,7 +402,6 @@ Changed:
 - Changed all functions named `wiimote_*()` to `wiiuse_*()`
 
 - Renamed many macros from `WIIMOTE_*` to `WIIUSE_*`
-
 
 Added:
 
@@ -365,9 +429,9 @@ Fixed:
 
 - Sometimes classic controller would only report infinite angle and magnitude for joysticks.
 
-
 v0.3 -- 10 Sept 2007
 --------------------
+
 Changed:
 
 - Moved license to GPLv3.
@@ -387,13 +451,14 @@ Added:
 Fixed:
 
 - When the wiimote accelerates the roll or pitch is unreliable and was
-	set to 0. It now remains at previous tilt value.
+  set to 0. It now remains at previous tilt value.
 
 - If no event callback was specified then no events would be processed
-	internally.
+  internally.
 
 v0.2 -- 25 Aug 2007
 -------------------
+
 Changed:
 
 - Bumped API version to 0.2.
@@ -407,7 +472,7 @@ Added:
 Fixed:
 
 - Roll and pitch rotation now ranges from -180 to 180 degrees
-	(previously -90 to 90).
+  (previously -90 to 90).
 
 - Bug when reading data from flash memory would read wrong address.
 
